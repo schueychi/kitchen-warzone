@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kitchen Warzone – Interactive Screen Layout Doc</title>
+  <meta name="description" content="Interactive design document for the Kitchen Warzone screen layout: family moods, food orders, ingredients, fridge and utensils." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Game Design Doc · Screen Layout #1</div>
+    <h1 class="logo"><span>Kitchen</span><span class="war">WARZONE</span></h1>
+    <p class="hero-sub">Keep every single family member fed before their patience runs out.<br>This document turns the paper sketch into a <b>playable, annotated layout</b>.</p>
+    <nav class="toc">
+      <a href="#sketch">① Sketch</a>
+      <a href="#play">② Play the layout</a>
+      <a href="#moods">③ Family moods</a>
+      <a href="#orders">④ Order urgency</a>
+      <a href="#cooking">⑤ Cooking &amp; recipes</a>
+      <a href="#fridge">⑥ Fridge &amp; utensils</a>
+      <a href="#style">⑦ Visual style</a>
+    </nav>
+  </div>
+  <div class="hero-food" aria-hidden="true">
+    <span>🍅</span><span>🥩</span><span>🍞</span><span>🧀</span><span>🥚</span><span>🥬</span><span>🍔</span><span>🔥</span>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ 1. SKETCH ============ -->
+<section id="sketch" class="card">
+  <div class="sec-head"><span class="num">1</span><h2>From the paper sketch</h2></div>
+  <p class="lead">The original screen layout. Click the <b>numbered hotspots</b> to read what each element does and jump to it in the playable prototype.</p>
+  <div class="sketch-grid">
+    <div class="sketch-wrap" id="sketchWrap">
+      <img src="assets/sketch.jpg" alt="Hand-drawn screen layout sketch of Kitchen Warzone" />
+    </div>
+    <div class="hotspot-detail" id="hotspotDetail">
+      <div class="hd-empty">👈 Pick a hotspot on the sketch</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 2. PLAYABLE ============ -->
+<section id="play" class="card card-dark">
+  <div class="sec-head"><span class="num">2</span><h2>Play the layout</h2></div>
+  <p class="lead">Same structure as the sketch: <b>orders</b> on the left, the <b>player</b> working behind the counter, <b>ingredients</b> and <b>stoves/plates</b> on the counter, the <b>fridge</b> top-right and the <b>family</b> waiting at the bottom. Click things – the chef runs over and does the job.</p>
+
+  <div class="game-scroll">
+  <div class="game-shell" id="gameShell">
+    <div class="hud">
+      <div class="hud-item"><span class="hud-l">Round</span><b id="hudTime">3:00</b></div>
+      <div class="hud-item"><span class="hud-l">Coins</span><b id="hudCoins">0 🪙</b></div>
+      <div class="hud-item"><span class="hud-l">Family patience</span><b id="hudHearts">❤️❤️❤️</b></div>
+      <div class="hud-item"><span class="hud-l">Streak</span><b id="hudStreak">x0</b></div>
+      <div class="hud-spacer"></div>
+      <div class="seg" id="speedSeg" title="Patience drain speed">
+        <button data-speed="relaxed">🐢 Relaxed</button>
+        <button data-speed="normal" class="on">🍳 Normal</button>
+        <button data-speed="frenzy">🔥 Frenzy</button>
+      </div>
+      <button class="hud-btn" id="btnSound" title="Sound on/off">🔊</button>
+      <button class="hud-btn" id="btnPause" title="Pause (P)">⏸</button>
+      <button class="hud-btn" id="btnRestart" title="Restart">↻</button>
+    </div>
+
+    <div class="stage" id="stage">
+      <!-- ORDERS -->
+      <aside class="orders" id="ordersPanel" data-area="orders">
+        <h3>Food orders</h3>
+        <div class="order-list" id="orderList"></div>
+        <div class="orders-foot">(n) = seconds left to serve</div>
+      </aside>
+
+      <!-- KITCHEN -->
+      <div class="kitchen" id="kitchen">
+        <div class="lane" id="lane" data-area="player">
+          <div class="lane-label">Player lane</div>
+          <div class="chef" id="chef">
+            <div class="held" id="held"></div>
+            <div class="chef-body"></div>
+          </div>
+          <button class="st fridge" id="fridge" data-st="fridge" data-area="fridge" aria-label="Refrigerator">
+            <span class="door l"></span><span class="door r"></span>
+            <span class="fridge-inside">🧀🥚🥩<br>🍅🥬</span>
+            <span class="st-label">Fridge</span>
+          </button>
+        </div>
+
+        <div class="counter">
+          <div class="pantry" id="pantry" data-area="ingredients"></div>
+          <div class="cookzone" id="cookzone" data-area="cookzone"></div>
+        </div>
+
+        <div class="table" id="table" data-area="members"></div>
+
+        <div class="picker" id="picker" hidden></div>
+      </div>
+
+      <div class="toast-layer" id="toasts"></div>
+      <div class="fx-layer" id="fx"></div>
+
+      <div class="overlay" id="overlay"></div>
+    </div>
+
+    <div class="tipbar"><span class="tip-chef">👨‍🍳</span><span id="tipText">Press start to open the kitchen!</span></div>
+  </div>
+  </div>
+  <p class="hint-row">⌨️ Shortcuts: <kbd>P</kbd> pause · <kbd>Esc</kbd> close fridge/drawer · <kbd>Q</kbd> throw away what you hold.</p>
+</section>
+
+<!-- ============ 3. MOODS ============ -->
+<section id="moods" class="card">
+  <div class="sec-head"><span class="num">3</span><h2>Family moods over time</h2></div>
+  <p class="lead">Each family member has a <b>patience meter</b>. As it drains, their face, body language and animations escalate. Drag the slider (or press play) to watch someone get hungrier while you cook.</p>
+
+  <div class="mood-lab">
+    <div class="mood-stage" id="moodStage">
+      <div class="mood-fx" id="moodFx"></div>
+      <div class="mood-char" id="moodChar"></div>
+      <div class="mood-tag" id="moodTag"></div>
+    </div>
+    <div class="mood-controls">
+      <div class="who" id="whoPick"></div>
+      <label class="slider-l">Patience remaining: <b id="patVal">100%</b></label>
+      <input type="range" id="patSlider" min="0" max="100" value="100" />
+      <div class="mood-scale" id="moodScale"></div>
+      <div class="btn-row">
+        <button class="btn" id="moodPlay">▶ Simulate waiting</button>
+        <button class="btn btn-pink" id="moodServe">🍽️ Serve correct dish</button>
+        <button class="btn btn-green" id="moodWrong">🙅 Serve wrong dish</button>
+      </div>
+      <div class="mood-desc" id="moodDesc"></div>
+    </div>
+  </div>
+
+  <h3 class="sub">All mood states</h3>
+  <div class="mood-gallery" id="moodGallery"></div>
+
+  <div class="callouts">
+    <div class="callout"><b>👀 They watch you cook</b><p>Pupils follow the chef across the kitchen. Hungry members stare harder – a constant, subtle reminder.</p></div>
+    <div class="callout"><b>📈 Patience differs</b><p>Kids drain fastest (≈42s), grandparents slowest (≈75s). Later in the round, everyone becomes up to 30% less patient.</p></div>
+    <div class="callout"><b>💰 Mood = reward</b><p>Serving someone happy earns the biggest tip. Letting anyone storm off costs a heart – lose 3 and the shift is over.</p></div>
+  </div>
+</section>
+
+<!-- ============ 4. ORDERS ============ -->
+<section id="orders" class="card">
+  <div class="sec-head"><span class="num">4</span><h2>Food orders &amp; urgency</h2></div>
+  <p class="lead">The order panel is the player's to-do list. Each ticket shows the dish, who ordered it, the ingredients needed and the <b>seconds left</b> – exactly like the <code>(5)</code> <code>(7)</code> numbers in the sketch. Tickets auto-sort so the most urgent is always on top.</p>
+
+  <div class="urg-grid">
+    <div class="urg-col">
+      <div class="urg-title calm">Calm <small>&gt; 40% time</small></div>
+      <div id="tCalm"></div>
+      <p>Green bar, ticket sits still. Plenty of time.</p>
+    </div>
+    <div class="urg-col">
+      <div class="urg-title warn">Warning <small>20 – 40%</small></div>
+      <div id="tWarn"></div>
+      <p>Amber, ticket wobbles gently, timer turns bold.</p>
+    </div>
+    <div class="urg-col">
+      <div class="urg-title crit">Critical <small>&lt; 20%</small></div>
+      <div id="tCrit"></div>
+      <p>Red, flashing, shaking, ticking sound and a red vignette around the whole screen.</p>
+    </div>
+  </div>
+
+  <div class="urg-live">
+    <div class="urg-live-box" id="urgBox">
+      <div class="urg-vignette"></div>
+      <div id="tLive"></div>
+      <div class="urg-phase" id="urgPhase"></div>
+    </div>
+    <div class="urg-live-ctrl">
+      <h4>Live countdown</h4>
+      <p>A 20-second order running out on loop. Notice how the feedback layers stack up as time drains: colour → motion → sound → whole-screen alarm.</p>
+      <label class="chk"><input type="checkbox" id="urgVig" checked> Screen-edge red vignette</label>
+      <label class="chk"><input type="checkbox" id="urgSound"> Ticking sound</label>
+      <button class="btn" id="urgRestart">↻ Restart countdown</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 5. COOKING ============ -->
+<section id="cooking" class="card">
+  <div class="sec-head"><span class="num">5</span><h2>Cooking flow &amp; recipe book</h2></div>
+  <p class="lead">Every dish follows the same loop. Ingredients may need preparing with a utensil before they go on a plate. The player can only carry <b>one thing at a time</b> – that's where the frenzy comes from.</p>
+
+  <div class="flow">
+    <div class="flow-step"><span>🧺</span><b>Grab</b><small>from counter or fridge</small></div>
+    <div class="flow-arrow">➜</div>
+    <div class="flow-step"><span>🔪</span><b>Prepare</b><small>chop · fry · boil</small></div>
+    <div class="flow-arrow">➜</div>
+    <div class="flow-step"><span>🍽️</span><b>Plate</b><small>combine up to 3 items</small></div>
+    <div class="flow-arrow">➜</div>
+    <div class="flow-step"><span>🙋</span><b>Serve</b><small>to the right person</small></div>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><b>🔪 Chopping</b> only progresses while the chef stands at the cutting board (2s).</div>
+    <div class="rule"><b>🔥 Frying / 💧 boiling</b> runs on its own (5–6s)… but leave it 7s more and it <b>burns</b>.</div>
+    <div class="rule"><b>🗑️ Burnt or wrong</b> food goes in the bin. Ingredients on the counter restock slowly.</div>
+  </div>
+
+  <h3 class="sub">Recipe book <small>(click a card to see the step-by-step)</small></h3>
+  <div class="recipes" id="recipeBook"></div>
+</section>
+
+<!-- ============ 6. FRIDGE ============ -->
+<section id="fridge" class="card">
+  <div class="sec-head"><span class="num">6</span><h2>Fridge &amp; utensils</h2></div>
+  <p class="lead">The counter only holds the basics. Anything perishable – or anything you ran out of – lives in the <b>refrigerator</b>. Tools live in the <b>utensil drawer</b> and must be set up on the right station before certain recipes can be cooked.</p>
+
+  <div class="fu-grid">
+    <div class="fu-card">
+      <div class="mini-fridge" id="miniFridge" role="button" tabindex="0" aria-label="Open fridge">
+        <div class="mf-inside">
+          <div class="mf-shelf" id="mfShelf1"></div>
+          <div class="mf-shelf" id="mfShelf2"></div>
+        </div>
+        <div class="mf-door l"><i></i></div>
+        <div class="mf-door r"><i></i></div>
+      </div>
+      <h4>Refrigerator</h4>
+      <ul>
+        <li>Click it → chef walks over → doors swing open.</li>
+        <li>Holds <b>fridge-only</b> ingredients: 🧀 cheese, 🥚 eggs, 🥩 meat.</li>
+        <li>Backup stock of 🍅 and 🥬 when the counter is empty.</li>
+        <li>It's at the far end of the kitchen: every trip costs precious seconds.</li>
+      </ul>
+    </div>
+    <div class="fu-card">
+      <div class="mini-drawer" id="miniDrawer" role="button" tabindex="0" aria-label="Open utensil drawer">
+        <div class="md-front"><i></i>Utensils</div>
+        <div class="md-box" id="mdBox"></div>
+      </div>
+      <h4>Utensil drawer</h4>
+      <ul>
+        <li><b>🔪 Knife</b> → put on the cutting board to unlock chopping.</li>
+        <li><b>Frying pan</b> → put on a stove to fry eggs and meat.</li>
+        <li><b>Cooking pot</b> → put on a stove to boil potatoes and rice.</li>
+        <li>Stoves can be re-equipped: take the pan off, put the pot on – a strategic choice when orders change.</li>
+      </ul>
+    </div>
+    <div class="fu-card">
+      <div class="station-matrix">
+        <div class="sm-row sm-h"><span>Station</span><span>Needs</span><span>Prepares</span></div>
+        <div class="sm-row"><span>Cutting board</span><span>🔪</span><span>🍅 🥬 🧀</span></div>
+        <div class="sm-row"><span>Stove</span><span class="sm-ut" id="smPan"></span><span>🥚 🥩</span></div>
+        <div class="sm-row"><span>Stove</span><span class="sm-ut" id="smPot"></span><span>🥔 🌾</span></div>
+        <div class="sm-row"><span>Plate</span><span>—</span><span>assemble dish</span></div>
+        <div class="sm-row"><span>Bin</span><span>—</span><span>discard</span></div>
+      </div>
+      <h4>Station matrix</h4>
+      <p>Trying to use a station without its utensil shows an in-game hint, so players learn the rule by doing.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 7. STYLE ============ -->
+<section id="style" class="card">
+  <div class="sec-head"><span class="num">7</span><h2>Visual style: Overcooked-style frenzy</h2></div>
+  <p class="lead">Chunky outlines, saturated colours, bouncy everything. Feedback should be loud and instant – the player's eyes are darting between orders, stoves and faces, so every important event needs colour, motion <i>and</i> sound.</p>
+
+  <div class="style-grid">
+    <div>
+      <h4>Palette</h4>
+      <div class="palette">
+        <div style="--c:#ff5a3c"><span>Tomato<br>#FF5A3C</span></div>
+        <div style="--c:#ffc93c"><span>Mustard<br>#FFC93C</span></div>
+        <div style="--c:#2ec4b6"><span>Mint<br>#2EC4B6</span></div>
+        <div style="--c:#23264a"><span>Night<br>#23264A</span></div>
+        <div style="--c:#fff4e0"><span>Cream<br>#FFF4E0</span></div>
+        <div style="--c:#2b1d14"><span>Ink<br>#2B1D14</span></div>
+      </div>
+      <h4>Principles</h4>
+      <ul class="principles">
+        <li><b>Thick ink outlines</b> (4px) + hard drop shadows make objects read instantly.</li>
+        <li><b>Everything bounces</b>: pick-ups pop, the chef bobs while running, stoves rattle.</li>
+        <li><b>Colour = state</b>: green calm → amber warning → red panic, used consistently on tickets, bars and faces.</li>
+        <li><b>Escalating chaos</b>: more orders, less patience, louder alarms as the round progresses.</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Feedback playground</h4>
+      <div class="fx-demo" id="fxDemo">
+        <div class="fx-demo-dish" id="fxDish">🍔</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" data-fx="serve">✅ Delivery</button>
+        <button class="btn" data-fx="coins">🪙 Coin pop</button>
+        <button class="btn" data-fx="burn">🔥 Burnt</button>
+        <button class="btn" data-fx="shake">💥 Screen shake</button>
+        <button class="btn" data-fx="alarm">🚨 Order expiring</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">Kitchen Warzone · Interactive screen-layout document · built from the hand-drawn sketch</footer>
+
+<script src="js/shared.js"></script>
+<script src="js/game.js"></script>
+<script src="js/doc.js"></script>
+</body>
+</html>
